@@ -1,4 +1,5 @@
 /**
+ * 最长回文子串
  * 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
  * <p>
  * 示例 1：
@@ -17,32 +18,96 @@
  */
 public class LongestPalindromicSubstring {
     public static void main(String[] args) {
-        System.out.println(longestPalindrome("babad"));
+        System.out.println(longestPalindrome("ccc"));
     }
 
     public static String longestPalindrome(String s) {
-        if (s.length() == 1) return s;
+        if (s == null || s.length() == 1) return s;
+        int n = s.length();
         String maxStr = "";
-        for (int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < n; i++) {
             String temp = "";
             int left = i;
             int right = i;
             boolean flag = true;
-            while (left >= 0 && right < s.length() && flag) {
-                if (s.charAt(left) == s.charAt(right)) {
-                    temp = s.substring(left, right + 1);
-                } else if (right + 1 < s.length() && s.charAt(left) == s.charAt(right + 2))
-                    temp = s.substring(left, right + 2);
-                if (temp.length() > maxStr.length()) {
-                    maxStr = temp;
-                } else {
-                    flag = false;
+            while (left >= 0 && right < n && flag) {
+                flag = false;
+                temp = s.substring(left, right + 1);
+                if (isPalindrome(temp)) {
+                    maxStr = maxStr.length() > temp.length() ? maxStr : temp;
+                    flag = true;
                 }
                 right++;
+                if (right < n) {
+                    temp = s.concat(String.valueOf(s.charAt(right)));
+                    if (isPalindrome(temp)) {
+                        maxStr = maxStr.length() > temp.length() ? maxStr : temp;
+                        flag = true;
+                    }
+
+                }
                 left--;
+                if (left >= 0 && right < n) {
+                    temp = String.valueOf(s.charAt(left)).concat(s);
+                    if (isPalindrome(temp)) {
+                        maxStr = maxStr.length() > temp.length() ? maxStr : temp;
+                        flag = true;
+                    }
+
+                }
             }
 
         }
         return maxStr;
     }
+
+    /**
+     * 暴力解法，会超出时间限制
+     *
+     * @param s
+     * @return
+     */
+    public static String longestPalindrome2(String s) {
+        if (s == null || s.length() == 1) return s;
+        int n = s.length();
+        String maxStr = "";
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                if (isPalindrome(s.substring(i, j + 1)) && maxStr.length() < j + 1 - i) {
+                    maxStr = s.substring(i, j + 1);
+                }
+            }
+        }
+        return maxStr;
+    }
+
+    /**
+     * 判断是否回文
+     *
+     * @param s
+     * @return
+     */
+    private static boolean isPalindrome(String s) {
+        if (s == null || s.length() == 1) return true;
+        char[] tempArray = s.toCharArray();
+        StringBuilder reserve = new StringBuilder();
+        for (int j = tempArray.length - 1; j >= 0; j--) {
+            reserve.append(tempArray[j]);
+        }
+        return s.equals(reserve.toString());
+    }
+
+    /**
+     * 参考方法
+     *
+     * @param s
+     * @return
+     */
+    private static boolean isPalindrome2(String s) {
+        if (s == null || s.length() == 1) return true;
+        String reserve = new StringBuilder(s).reverse().toString();
+        return s.equals(reserve);
+    }
+
+
 }
