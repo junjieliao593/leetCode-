@@ -18,7 +18,52 @@
  */
 public class LongestPalindromicSubstring {
     public static void main(String[] args) {
-        System.out.println(longestPalindrome("ccc"));
+        System.out.println(longestPalindrome_dp("bdk"));
+        System.out.println(longestPalindrome_dp("cbbd"));
+        System.out.println(longestPalindrome_dp("ab"));
+        System.out.println(longestPalindrome_dp("ccc"));
+        System.out.println(longestPalindrome_dp("adddddda"));
+    }
+
+    public static String longestPalindrome_dp(String s) {
+        if (s == null || s.length() == 1) return s;
+        int n = s.length();
+        char[] charArray = s.toCharArray();
+        boolean[][] dp = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            //i到i
+            dp[i][i] = true;
+        }
+        //i = 1,2
+        int max_i = 0;
+        int max_j = 0;
+        //i到j之间的字串判断（只计算长度超过3的）
+        for (int j = 1; j < n; j++) {
+            for (int i = 0; i < j; i++) {
+                if (charArray[i] == charArray[j]) {
+                    if (j == (i + 1)) {
+                        //最中间相邻两位相等的情况
+                        dp[i][i + 1] = true;
+                    } else {
+                        //对称情况下由上一个状态决定
+                        dp[i][j] = dp[i + 1][j - 1];
+                    }
+                    if (dp[i][j] && ((max_j - max_i) < (j - i))) {
+                        max_j = j;
+                        max_i = i;
+                    }
+                } else {
+                    dp[i][j] = false;
+                }
+
+            }
+        }
+
+
+        String maxStr = s.substring(max_i, max_j + 1);
+
+
+        return maxStr;
     }
 
     public static String longestPalindrome(String s) {
