@@ -26,12 +26,19 @@
  */
 public class PalindromeNumber {
     public static void main(String[] args) {
-        System.out.println(isPalindrome(0));
-        System.out.println(isPalindrome(-123321));
-        System.out.println(isPalindrome(123321));
-        System.out.println(isPalindrome(1876885181));
+        System.out.println(isPalindrome2(0));
+        System.out.println(isPalindrome2(10));
+        System.out.println(isPalindrome2(-123321));
+        System.out.println(isPalindrome2(123321));
+        System.out.println(isPalindrome2(1876885181));
     }
 
+    /**
+     * 方法一：反转比较
+     *
+     * @param x
+     * @return
+     */
     public static boolean isPalindrome(int x) {
         if (x < 0) return false;
         int begin = x;
@@ -41,5 +48,37 @@ public class PalindromeNumber {
             x = x / 10;
         }
         return begin == temp;
+    }
+
+
+    /**
+     * 方法二：只反转比较一半
+     * 执行结果：
+     * 通过
+     * 显示详情
+     * 执行用时：
+     * 9 ms
+     * , 在所有 Java 提交中击败了
+     * 99.20%
+     * 的用户
+     * 内存消耗：
+     * 38 MB
+     * , 在所有 Java 提交中击败了
+     * 95.50%
+     * 的用户
+     *
+     * @param x
+     * @return
+     */
+    public static boolean isPalindrome2(int x) {
+        if (x == 0) return true;
+        if (x < 0 || x % 10 == 0) return false;
+        int revert = 0;
+        while (x > revert) {
+            revert = revert * 10 + x % 10;
+            x = x / 10;
+        }
+        //奇偶分别判断
+        return x == revert || revert / 10 == x;
     }
 }
