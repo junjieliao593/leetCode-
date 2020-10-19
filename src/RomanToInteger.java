@@ -56,11 +56,11 @@ import java.util.Map;
  */
 public class RomanToInteger {
     public static void main(String[] args) {
-        System.out.println(romanToInt("III"));
-        System.out.println(romanToInt("IV"));
-        System.out.println(romanToInt("IX"));
-        System.out.println(romanToInt("LVIII"));
-        System.out.println(romanToInt("MCMXCIV"));
+        System.out.println(romanToInt2("III"));
+        System.out.println(romanToInt2("IV"));
+        System.out.println(romanToInt2("IX"));
+        System.out.println(romanToInt2("LVIII"));
+        System.out.println(romanToInt2("MCMXCIV"));
     }
     public static int romanToInt(String s) {
         Map<String, Integer> map = new HashMap<>();
@@ -88,5 +88,44 @@ public class RomanToInteger {
             }
         }
         return re;
+    }
+
+    /**
+     * 优化解法
+     * 罗马数字由 I,V,X,L,C,D,M 构成；
+     * 当小值在大值的左边，则减小值，如 IV=5-1=4；
+     * 当小值在大值的右边，则加小值，如 VI=5+1=6；
+     * 由上可知，右值永远为正，因此最后一位必然为正。
+     *
+     */
+    public static int romanToInt2(String s) {
+        char[] sChar = s.toCharArray();
+        int re = 0;
+        int length = s.length();
+        int pre = getWorth(sChar[0]);
+        for(int i=0;i<length -1 ;i++){
+            int next =  getWorth(sChar[i+1]);
+           if(pre>=next){
+               re += pre;
+           }else {
+               re -= pre;
+           }
+            pre = next;
+        }
+        re += pre;
+        return re;
+    }
+
+    public static int getWorth(char number){
+        switch(number){
+            case 'I': return 1;
+            case 'V': return 5;
+            case 'X': return 10;
+            case 'L': return 50;
+            case 'C': return 100;
+            case 'D': return 500;
+            case 'M': return 1000;
+        }
+        return 0;
     }
 }
