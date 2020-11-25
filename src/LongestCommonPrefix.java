@@ -54,9 +54,39 @@ public class LongestCommonPrefix {
                 return re.toString();
             }
         }
+
         return re.toString();
     }
 
 
-
+    /**
+     * 分治法
+     *
+     * @param strs
+     * @return
+     */
+    public static String longestCommonPrefix2(String[] strs) {
+        int j = 0;
+        StringBuilder re = new StringBuilder("");
+        if (strs.length == 1) {
+            return strs[0];
+        }
+        for (int i = 0; i < strs.length - 1; ) {
+            if (strs[i].length() <= j || strs[i + 1].length() <= j || strs[i].equals("") || strs[i + 1].equals("")) {
+                return re.toString();
+            }
+            if (strs[i].charAt(j) == strs[i + 1].charAt(j)) {
+                if (i == strs.length - 2) {
+                    re.append(strs[i].charAt(j));
+                    j++;
+                    i = 0;
+                } else {
+                    i++;
+                }
+            } else {
+                return re.toString();
+            }
+        }
+        return re.toString();
+    }
 }
